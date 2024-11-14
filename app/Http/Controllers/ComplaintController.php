@@ -10,6 +10,7 @@ use App\Models\Complaint;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use App\Models\ComplaintCase;
 
 
 class ComplaintController extends Controller
@@ -168,7 +169,17 @@ class ComplaintController extends Controller
         }
 
         $complaint->status = 1;
-        $complaint->save();
+        $result = $complaint->save();
+        if($result){
+            
+            foreach($member_id as $member){
+                $case = new ComplaintCase();
+                $case->team_id = $member;
+                $case->complaint_id = $complaint->id;
+                $case->save();
+            }
+
+        }
         
         return redirect()->route('complaints.index')->with('success','email successfully forwarded');
     }

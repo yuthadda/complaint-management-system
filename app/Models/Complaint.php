@@ -24,4 +24,8 @@ class Complaint extends Model
     public function department(){
         return $this->belongsTo(Department::class);
     }
+
+    public function complaintcases(){
+        return $this->hasMany(ComplaintCase::class);
+    }
 }
